@@ -94,12 +94,14 @@
 (defui Item
   static om/IQuery
   (query [this]
-         [:db/id :item/description {:item/votes [:item-votes/today :item-votes/total]}])
+         [:db/id :item/description {:item/votes [:item-votes/today :item-votes/total]} {:etherean/user [:user/stake]}])
   Object
   (initLocalState [this]
                   {:dialog false})
   (render [this]
-          (let [{:keys [:db/id :item/description :item/votes]} (om/props this)
+          (let [{:keys [:db/id :item/description :item/votes :etherean/user]} (om/props this)
+                {:keys [:user/stake]} user
+                has-stake (pos? stake)
                 {:keys [dialog]}            (om/get-state this)
                 {:keys [direction]}         dialog
                 hide-dialog                 (fn []
@@ -141,7 +143,10 @@
                                                                 :min-height  0
                                                                 :outline     "none"}
                                                      :on-click (fn [e]
-                                                                 (om/update-state! this assoc :dialog {:id id :direction ({:down 0 :up 1} direction)}))}))]
+                                                                 (if has-stake
+                                                                   (om/update-state! this assoc :dialog {:id id :direction ({:down 0 :up 1} direction)})
+                                                                   (.show my-toaster #js {:intent (:danger bp/intents)
+                                                                                          :message "You need to deposit some stake first before voting on items. Please go to the \"Voting Stake\" tab first."})))}))]
                        (dom/div {:class "pt-button-group pt-vertical"}
                                 (vote-button :up false)
                                 (dom/div {:style {:text-align  "center"
@@ -238,10 +243,12 @@
                                                                                       :min-height  0
                                                                                       :outline     "none"}
                                                                            :on-click (fn [e]
-                                                                                       (if can-vote-proposal
+                                                                                       (if (and has-stake can-vote-proposal)
                                                                                          (om/update-state! this assoc :dialog {:id id :direction direction})
                                                                                          (.show my-toaster #js {:intent (:danger bp/intents)
-                                                                                                                :message "You already voted on a proposal today. You will need to wait until tomorrow to vote again." } )))}))]
+                                                                                                                :message (if has-stake
+                                                                                                                           "You already voted on a proposal today. You will need to wait until tomorrow to vote again."
+                                                                                                                           "Please deposit stake first in the stake tab to vote on proposals.") } )))}))]
                                              (dom/div {:class "pt-button-group pt-vertical"}
                                                       (vote-button :up false unsaved)
                                                       (dom/div {:style {:text-align  "center"
@@ -354,7 +361,9 @@
                                                        (om/update-state! this assoc :dialog {:type  :deposit
                                                                                              :value ""}))}
                                           "Deposit Stake")
-                               (bp/button "Withdraw Stake")))
+                               (bp/button {:on-click (fn [e]
+                                                       (om/update-state! this assoc :dialog{:type  :withdraw}))}
+                                          "Withdraw Stake")))
               (let [{:keys [:dialog]}      (om/get-state this)
                    {:keys [:type :value]} dialog]
                (let [value-status (cond (= value "")       :missing
@@ -367,32 +376,39 @@
                                    :title   (if (= type :deposit)
                                               "Deposit Stake"
                                               "Withdraw Stake")}
-                                  (dom/div {:class "pt-dialog-body"}
-                                           (dom/p "In order to vote on ethereanmind you need to place a refundable deposit of ether. You will be able to start voting immediately after depositing ether, but you need to wait a month before you can withdraw your deposit again.")
-                                           (dom/p  (dom/b "The rules of the smart contract assure that no one else can withdraw your money and that you will receive back 100% of your deposit."))
-                                           (dom/p "Balance available: " balance " Ether")
-                                           (bp/input-group {#_#_:class       "pt-input pt-fill"
-                                                            :placeholder "Deposit Amount (Ether)"
-                                                            :value       value
-                                                            :right-element (when (not= value-status :missing)
-                                                                             (bp/button {:class (if (= value-status :good)
-                                                                                                  "pt-icon-tick pt-intent-success"
-                                                                                                  "pt-icon-cross pt-intent-danger")}))
-                                                            :on-change    (fn [e]
-                                                                            (let [value-new (.-value (.-target e))]
-                                                                              (if (re-matches #"[0-9]*\.?[0-9]*" value-new)
-                                                                                (om/update-state! this assoc-in [:dialog :value] value-new)
-                                                                                (om/update-state! this assoc-in [:dialog :value] value))
-                                                                              (om/update-state! this assoc-in [:noise] (rand-int 1000000))))}))
+                            (dom/div {:class "pt-dialog-body"}
+                                     (if (= type :deposit)
+                                       [(dom/p "In order to vote on ethereanmind you need to place a refundable deposit of ether. You will be able to start voting immediately after depositing ether, but you need to wait a month before you can withdraw your deposit again.")
+                                        (dom/p  (dom/b "The rules of the smart contract assure that no one else can withdraw your money and that you will receive back 100% of your deposit."))
+                                        (dom/p "Balance available: " balance " Ether")
+                                        (bp/input-group {#_#_:class       "pt-input pt-fill"
+                                                         :placeholder "Deposit Amount (Ether)"
+                                                         :value       value
+                                                         :right-element (when (not= value-status :missing)
+                                                                          (bp/button {:class (if (= value-status :good)
+                                                                                               "pt-icon-tick pt-intent-success"
+                                                                                               "pt-icon-cross pt-intent-danger")}))
+                                                         :on-change    (fn [e]
+                                                                         (let [value-new (.-value (.-target e))]
+                                                                           (if (re-matches #"[0-9]*\.?[0-9]*" value-new)
+                                                                             (om/update-state! this assoc-in [:dialog :value] value-new)
+                                                                             (om/update-state! this assoc-in [:dialog :value] value))
+                                                                           (om/update-state! this assoc-in [:noise] (rand-int 1000000))))})]
+                                       [(dom/p "You can now withdraw all of your stake (Currently " stake " Ether) back into your regular ethereum account at [" (format-address address) "]. At that point, you will no longer be able to participate in voting- You'll need to deposit new funds to vote again.")]))
                                   (dom/div {:class "pt-dialog-footer"}
                                            (dom/div {:class "pt-dialog-footer-actions"}
                                                     (bp/button {:disabled (not= value-status :good)
                                                                 :class    "pt-intent-primary"
                                                                 :on-click (fn [e]
-                                                                            (om/transact! this `[(user/deposit {:value ~value})
-                                                                                                 :etherean/main-stakes])
+                                                                            (if (= type :deposit)
+                                                                              (om/transact! this `[(user/deposit {:value ~value})
+                                                                                                   :etherean/main-stakes])
+                                                                              (om/transact! this `[(user/withdraw)
+                                                                                                   :etherean/main-stakes]))
                                                                             (om/update-state! this dissoc :dialog))}
-                                                               "Deposit")
+                                                               (if (= type :deposit)
+                                                                 "Deposit"
+                                                                 "Withdraw"))
                                                     (bp/button {:on-click close-dialog}
                                                                "Cancel"))))))
               (dom/div {:class "pt-card pt-interactive pt-elevation-1"
@@ -475,42 +491,46 @@
                         :sections nil
                         :colored 1}))
 
+(defn get-tick-count []
+  (.getTime (js/Date.)))
+
 (defn render-brain [ctx rotation render-graph]
-  (.clearRect ctx 0 0 canvas-resolution canvas-resolution)
-  (let [vertices  (vec (map (partial point->screen canvas-resolution rotation) brain-vertices))
-        line      (fn [a b]
-                    (doto ctx
-                      (.beginPath)
-                      (.moveTo ((vertices a) 0) ((vertices a) 1))
-                      (.lineTo ((vertices b) 0) ((vertices b) 1))
-                      (.stroke)))
-        rgb       (fn [color brightness opaque]
-                    (str "rgba("
-                         (apply str
-                                (interpose ","
-                                           (conj (vec (for [c color]
-                                                     (let [colored (:colored @brain-state)]
-                                                       (int (+ (* colored (min (* (+ 50 (* 160 c)) (+ 0.7 brightness)) 255))
-                                                               (* (- 1 colored) 255))))))
-                                                 (if opaque
-                                                   (+ 0 (* 1 (:colored @brain-state)))
-                                                   (+ 0.05 (* 0.45 (:colored @brain-state)))))))))
-        set-color (fn [color brightness]
-                    (set! (.-strokeStyle ctx) (rgb color brightness false)))
-        render-text (fn [label text color z-begin z-end]
-                      (when (pos? (:colored @brain-state))
-                        (set! (.-lineWidth ctx) 4)
-                        (let [[x y z] (point->screen canvas-resolution rotation label)]
-                          (when (< z-begin z z-end)
-                            (set! (.-strokeStyle ctx) "#111A22")
-                            (set! (.-fillStyle ctx) (rgb color (+ (* z 2) 1) true))
-                            (doall (map-indexed (fn [index s]
-                                                  (doto ctx
-                                                    (.strokeText s x (+ y (* index 15)))
-                                                    (.fillText s x (+ y (* index 15)))))
-                                                (str/split text #" ")))))
-                        (set! (.-lineWidth ctx) 1)))
-        sections (:sections @brain-state)]
+  (let [starting-time (get-tick-count)
+        vertices      (vec (map (partial point->screen canvas-resolution rotation) brain-vertices))
+        line          (fn [a b]
+                        (doto ctx
+                          (.beginPath)
+                          (.moveTo ((vertices a) 0) ((vertices a) 1))
+                          (.lineTo ((vertices b) 0) ((vertices b) 1))
+                          (.stroke)))
+        rgb           (fn [color brightness opaque]
+                        (str "rgba("
+                             (apply str
+                                    (interpose ","
+                                               (conj (vec (for [c color]
+                                                            (let [colored (:colored @brain-state)]
+                                                              (int (+ (* colored (min (* (+ 50 (* 160 c)) (+ 0.7 brightness)) 255))
+                                                                      (* (- 1 colored) 255))))))
+                                                     (if opaque
+                                                       (+ 0 (* 1 (:colored @brain-state)))
+                                                       (+ 0.05 (* 0.45 (:colored @brain-state)))))))))
+        set-color     (fn [color brightness]
+                        (set! (.-strokeStyle ctx) (rgb color brightness false)))
+        render-text   (fn [label text color z-begin z-end]
+                        (when (pos? (:colored @brain-state))
+                          (set! (.-lineWidth ctx) 4)
+                          (let [[x y z] (point->screen canvas-resolution rotation label)]
+                            (when (< z-begin z z-end)
+                              (set! (.-strokeStyle ctx) "#111A22")
+                              (set! (.-fillStyle ctx) (rgb color (+ (* z 2) 1) true))
+                              (doall (map-indexed (fn [index s]
+                                                    (doto ctx
+                                                      (.strokeText s x (+ y (* index 15)))
+                                                      (.fillText s x (+ y (* index 15)))))
+                                                  (str/split text #" ")))))
+                          (set! (.-lineWidth ctx) 1)))
+        sections      (:sections @brain-state)]
+    (.clearRect ctx 0 0 canvas-resolution canvas-resolution)
     (set! (.-font ctx) "15px sans-serif")
     (set! (.-textAlign ctx) "center")
     (when (seq sections)
@@ -527,7 +547,8 @@
               (line a b))))))
     (when (seq sections)
       (doseq [{:keys [region faces centroid label]} render-graph]
-        (render-text label (:description (sections region)) (region-color (:index (sections region))) 0 1000)))))
+        (render-text label (:description (sections region)) (region-color (:index (sections region))) 0 1000)))
+    #_(mdbg (- (get-tick-count) starting-time))))
 
 (defui Brain
   static om/IQuery
@@ -639,7 +660,7 @@
                         (js/clearInterval (get-in (om/get-state this) [:intervals :address])))
   (render [this] 
           (let [{:keys [:etherean/network-id :user/can-vote-proposal :user/stake] proposals-props :etherean/main-proposals stakes-props :etherean/main-stakes items-props :etherean/main-items brain-props :etherean/main-brain} (om/props this)]
-            (dom/div {:class "pt-dark" :style {:display "flex" :justify-content "center" }}
+            (dom/div {:class "pt-dark" :style {:display "flex" :justify-content "center" :zoom 1.3}}
                      (dom/div { :style {:flex-grow "1" :max-width "600px"}}
                               (bp/tabs {#_#_:initial-selected-tab-index 4
                                         :on-change (fn [index]
@@ -874,6 +895,13 @@
                     (fn [state]
                       (assoc-in state [:stake/by-id (get-in state [:etherean/user :user/address]) :stake/value] :mining))))})
 
+(defmethod mutate 'user/withdraw [env dispath-key params]
+  {:remote true
+   :action (fn []
+             (swap! (:state env)
+                    (fn [state]
+                      (assoc-in state [:stake/by-id (get-in state [:etherean/user :user/address]) :stake/value] :mining))))})
+
 (defn tweak-tree [b]
   (let [nodes-to-elide #{:etherean/main-proposals :etherean/main-stakes :etherean/main-items :etherean/main-brain}
         nodes (set/intersection (set (keys b)) nodes-to-elide)]
@@ -934,9 +962,6 @@
          (update :proposal/order
                  (fn [order]
                    (vec (distinct (map fix-id order)))))))))
-
-(defn get-tick-count []
-  (.getTime (js/Date.)))
 
 (defn chan-call [contract fname & body]
   (let [c (as/chan)
@@ -1226,6 +1251,12 @@
                (go (let [staking (contract co/staking-abi (<! (chan-call etherean :stakingContract)))]
                      (<! (chan-transact staking :deposit {:value (js/web3.toWei value "ether")}))))))})
 
+(defmethod mutate-server 'user/withdraw [env dispatch-key params]
+  {:action (fn []
+             (let [{:keys [value]} params]
+               (go (let [staking (contract co/staking-abi (<! (chan-call etherean :stakingContract)))]
+                     (<! (chan-transact staking :withdraw))))))})
+
 (defmethod mutate-server 'etherean/advance-debug-day [env dispatch-key params]
   {:action (fn []
              (go (let [debug-time (int (<! (chan-call etherean :debugTime)))]
@@ -1267,11 +1298,16 @@
               (gdom/getElement "app"))
 
 (def my-toaster (bp/toaster))
-
+ 
 ;;todo
-;; slow down brain if rendering speed slow
 ;; disable item buttons if no stake, vote used up
 ;; fix label sorting
 ;; fix withdraw button
 ;; "call to action"
 ;; do full walk through
+;; add indicator for withdrawal date
+;; add visual indicator for current endorsed items
+;; freeze brain
+;; "synapse firing" on first page
+;; clickable brain
+;; future: let people submit links, make brain items topics
