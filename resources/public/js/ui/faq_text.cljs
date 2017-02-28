@@ -21,7 +21,7 @@
                                                                                                           :href "http://cointagion.com"}
                                                                                                          "cointagion.com")))
                                   (dom/tr (dom/td {:style {:text-align "right"}} "Github:") (dom/td (dom/a {:target "_blank"
-                                                                                                            :href "http://github.com/drcode"}
+                                                                                                            :href "http://github.com/drcode/ethereanmind"}
                                                                                                            "drcode")))
                                   (dom/tr (dom/td {:style {:text-align "right"}} "Reddit:") (dom/td (dom/a {:target "_blank"
                                                                                                             :href "https://www.reddit.com/user/drcode"}

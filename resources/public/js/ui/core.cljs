@@ -454,9 +454,10 @@
                           sections)))
 
 (defn render-graph [brain-faces vertexes vertex-colors]
-  (for [[region faces] (group-by (fn [k]
-                                   (vertex-colors (vertexes (first k))))
-                                 brain-faces)]
+  (for [[region faces] (dissoc (group-by (fn [k]
+                                              (vertex-colors (vertexes (first k))))
+                                         brain-faces)
+                               nil)]
     (let [centroid (vec (for [n (range 3)]
                       (/ (apply +
                                 (map (fn [face]
@@ -535,7 +536,7 @@
     (let [labels (when (seq sections)
                    (sort-by (fn [label]
                               (get-in label [:location 2]))
-                            (for [{:keys [region faces centroid label]} render-graph]
+                            (for [{:keys [region centroid label]} render-graph]
                               {:label label
                                :text (:description (sections region))
                                :color (region-color (:index (sections region)))
