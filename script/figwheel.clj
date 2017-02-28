@@ -16,9 +16,9 @@
      :figwheel true
      :source-paths ["src/cljs" "src/clj"]
      :compiler {:main "ui.core"
-                :asset-path "/out"
-                :output-to "resources/public/main.js"
-                :output-dir "resources/public/out"
+                :asset-path "/js"
+                :output-to "resources/public/js/main.js"
+                :output-dir "resources/public/js"
                 :verbose true}}]})
 
 (def sass-config

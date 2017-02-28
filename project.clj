@@ -40,8 +40,8 @@
   {:builds
    [{:id "advanced"
      :source-paths ["src/cljs"]
-     :compiler {:output-to "resources/public/main.js"
-                :output-dir "resources/public/out"
+     :compiler {:output-to "resources/public/js/main.js"
+                :output-dir "resources/public/js"
                 :source-map "resources/public/app.js.map"
                 :optimizations :advanced
                 :pretty-print false}}]}
