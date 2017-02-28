@@ -516,38 +516,48 @@
                                                        (+ 0.05 (* 0.45 (:colored @brain-state)))))))))
         set-color     (fn [color brightness]
                         (set! (.-strokeStyle ctx) (rgb color brightness false)))
-        render-text   (fn [label text color z-begin z-end]
+        render-text   (fn [{:keys [label text color location]}]
                         (when (pos? (:colored @brain-state))
                           (set! (.-lineWidth ctx) 4)
-                          (let [[x y z] (point->screen canvas-resolution rotation label)]
-                            (when (< z-begin z z-end)
-                              (set! (.-strokeStyle ctx) "#111A22")
-                              (set! (.-fillStyle ctx) (rgb color (+ (* z 2) 1) true))
-                              (doall (map-indexed (fn [index s]
-                                                    (doto ctx
-                                                      (.strokeText s x (+ y (* index 15)))
-                                                      (.fillText s x (+ y (* index 15)))))
-                                                  (str/split text #" ")))))
+                          (let [[x y z] location]
+                            (set! (.-strokeStyle ctx) "#111A22")
+                            (set! (.-fillStyle ctx) (rgb color (+ (* z 2) 1) true))
+                            (doall (map-indexed (fn [index s]
+                                                  (doto ctx
+                                                    (.strokeText s x (+ y (* index 15)))
+                                                    (.fillText s x (+ y (* index 15)))))
+                                                (str/split text #" "))))
                           (set! (.-lineWidth ctx) 1)))
         sections      (:sections @brain-state)]
     (.clearRect ctx 0 0 canvas-resolution canvas-resolution)
     (set! (.-font ctx) "15px sans-serif")
     (set! (.-textAlign ctx) "center")
-    (when (seq sections)
-      (doseq [{:keys [region faces centroid label]} render-graph]
-        (render-text label (:description (sections region)) (region-color (:index (sections region))) -1000 0)))
-    (doseq [[begin end brightness] [[-1000 -0.3 0] [-0.3 0.3 1] [0.3 1000 2]]]
-      (doseq [{:keys [region faces centroid label]} render-graph]
-        (let [color (if (seq sections)
-                      (region-color (:index (sections region)))
-                      [1 1 1])]
-          (set-color color brightness)
-          (doseq [[a b c :as face] faces]
-            (when (< begin ((vertices a) 2) end)
-              (line a b))))))
-    (when (seq sections)
-      (doseq [{:keys [region faces centroid label]} render-graph]
-        (render-text label (:description (sections region)) (region-color (:index (sections region))) 0 1000)))
+    (let [labels (when (seq sections)
+                   (sort-by (fn [label]
+                              (get-in label [:location 2]))
+                            (for [{:keys [region faces centroid label]} render-graph]
+                              {:label label
+                               :text (:description (sections region))
+                               :color (region-color (:index (sections region)))
+                               :location (point->screen canvas-resolution rotation label)})))
+          render-labels (fn [from to]
+                          (doseq [label labels]
+                            (when (< from (get-in label [:location 2]) to)
+                              (render-text label))))]
+      (doseq [[begin end brightness] [[-1000 -0.3 0] [-0.3 0.3 1] [0.3 1000 2]]]
+        (when (= begin -1000)
+          (render-labels begin end))
+        (doseq [{:keys [region faces centroid label]} render-graph]
+          (let [color (if (seq sections)
+                        (region-color (:index (sections region)))
+                        [1 1 1])]
+            (set-color color brightness)
+            (doseq [[a b c :as face] faces]
+              (when (< begin ((vertices a) 2) end)
+                (line a b)))))
+        (when-not (= begin -1000)
+          (render-labels begin end)))
+)
     #_(mdbg (- (get-tick-count) starting-time))))
 
 (defui Brain
@@ -607,7 +617,7 @@
                                                              0))
                                        :width   (mo/spring (if (= mode :zoom)
                                                              150
-                                                             80)
+                                                             60)
                                                            mo/wobbly)}}
                        (fn [value]
                          (swap! brain-state assoc :colored (:colored value))
@@ -670,18 +680,16 @@
                                                                        :left           0
                                                                        :right          0
                                                                        :display        "flex"
-                                                                       :flex-direction "column-reverse"
+                                                                       :flex-direction "column"
                                                                        :align-items    "center"}}
                                                               (dom/div {:class "pt-card pt-elevation-4"
                                                                         :style {:opacity       (if web3
-                                                                                                 0.5
+                                                                                                 0.7
                                                                                                  1)
                                                                                 :max-width "500px"
                                                                                 :margin-bottom "2rem"}}
-                                                                       (if web3
+                                                                       (when-not web3
                                                                          
-                                                                         (dom/span {:style {:font-size "1.5rem"}}
-                                                                                   "Ethereans, what's on your mind?")
                                                                          (dom/div {:style {:display "flex"
                                                                                            :align-items "center"
                                                                                            :font-size "1.1rem"}}
@@ -695,7 +703,9 @@
                                                                                                    :href   "https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn"}
                                                                                                   "metamask chrome extension")
                                                                                            ", or a similar ethereum data source.")
-                                                                                  (dom/img {:src "metamask.png"}))))
+                                                                                  (dom/img {:src "metamask.png"})))
+                                                                       (dom/h3 {:style {:text-align "center"}} "Ethereans, what's on your mind?")
+                                                                       (dom/p "EthereanMind lets ethereum users maintain a decentralized \"Top 10 list\" of the most important items to the community. Voting attacks are prevented via time-locked, fully refundable deposits in a staking contract."))
                                                               (when (and web3 network-id (not= network-id 3))
                                                                 (dom/div {:class "pt-callout pt-intent-danger pt-icon-warning-sign"
                                                                           :style {:max-width "500px"
@@ -704,9 +714,14 @@
                                                                          (if (= network-id 1)
                                                                            "You are currently connected to the Ethereum main network which uses real currency. This beta dapp is still running on the Ropsten testnet, which uses free currency. Do not yet use real money with this dapp!"
                                                                            "You are connected to the wrong network! This beta dapp is currently runing on the Ropsten Testnet. In Metamask, change the network option in the upper left corner of the popup window.")))
-                                                     
-)
-)
+                                                              (when (= network-id 3)
+                                                                (dom/div {:class "pt-callout pt-intent-warning pt-icon-warning-sign"
+                                                                          :style {:max-width "500px"
+                                                                                  :margin-bottom "2rem"
+                                                                                  :opacity 0.5
+                                                                                  :font-size "0.7em"}}
+                                                                         (dom/h5 "Ropsten Testnet Attack")
+                                                                         "Please be aware that the ethereum testnet is experiencing a (senseless) spam attack this week. This may cause failures in staking/voting that will not exist once this app goes out of beta on the main ethereum network."))))
                                        (bp/tab-panel (items-component items-props))
 
                                        (bp/tab-panel (proposals-component proposals-props))
@@ -1300,14 +1315,11 @@
 (def my-toaster (bp/toaster))
  
 ;;todo
-;; disable item buttons if no stake, vote used up
-;; fix label sorting
-;; fix withdraw button
 ;; "call to action"
-;; do full walk through
 ;; add indicator for withdrawal date
 ;; add visual indicator for current endorsed items
 ;; freeze brain
 ;; "synapse firing" on first page
 ;; clickable brain
+;; sometimes double label appears
 ;; future: let people submit links, make brain items topics

@@ -1,7 +1,7 @@
 (ns ui.contract
   (:require-macros [shared.debug :refer [mdbg]]))
 
-(def etherean-address-ropsten "0xbef61a1b176bbf479ef80a0357c8d355334e563a")
+(def etherean-address-ropsten "0x60eb73ef91b186663250405caaad263d1d2fbff1")
 
 (def etherean-address-testrpc "0x781c027c5c2047947a1b8014a23110053d94eea5")
 
