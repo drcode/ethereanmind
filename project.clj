@@ -1,4 +1,4 @@
-(defproject ethereanmind "v0.0.0"
+(defproject ethereanmind "0.0.1"
   :description "Some description"
   :url ""
   :license {:name "Eclipse Public License"
