@@ -28,7 +28,7 @@
                                                                                                            "u/drcode"))))))
    (dom/h2 {:key 0} "What is EthereanMind?")
    (dom/p {:key 1} "EthereanMind is a dapp (a \"Decentralized Autonomous Application\") and runs on the ethereum blockchain. This means that no \"web server\" is involved in running this application (In this beta version, there are still static files being hosted from a traditional web server.)")
-   (dom/p {:key 2} "EthereanMind is a tool to get the \"Temperature\" of the ethereum community by allowing users to propose issues that are on their mind, which are condensed into a prioritized list of the top ten items. To participate in the voting, holders of ether currency temporarily deposit they stake into the EthereanMind contracts.")
+   (dom/p {:key 2} "EthereanMind is a tool to get the \"Temperature\" of the ethereum community by allowing users to propose issues that are on their mind, which are condensed into a prioritized list of the top ten items. To participate in the voting, holders of ether currency temporarily deposit their stake into the EthereanMind contracts.")
    (dom/p {:key 22} "(Note: Until April 28th stakes are limited to a single ether finney, i.e. one penny USD, so that additional auditing of the staking system can first be performed.)")
    (dom/h2 {:key 3} "Why did you create EthereanMind?")
    (dom/p {:key 4} "Ethereum is a great tool for experimenting with concepts of autonomous voting, decentralized organizations, decentralized decision making, as well as new types of governance models. EthereanMind is an attempt to create a minimally-viable smart contract system that illustrates these possibilities.")

@@ -454,10 +454,9 @@
                           sections)))
 
 (defn render-graph [brain-faces vertexes vertex-colors]
-  (for [[region faces] (dissoc (group-by (fn [k]
-                                              (vertex-colors (vertexes (first k))))
-                                         brain-faces)
-                               nil)]
+  (for [[region faces] (group-by (fn [k]
+                                          (vertex-colors (vertexes (first k))))
+                                        brain-faces)]
     (let [centroid (vec (for [n (range 3)]
                       (/ (apply +
                                 (map (fn [face]
@@ -517,7 +516,7 @@
                                                        (+ 0.05 (* 0.45 (:colored @brain-state)))))))))
         set-color     (fn [color brightness]
                         (set! (.-strokeStyle ctx) (rgb color brightness false)))
-        render-text   (fn [{:keys [label text color location]}]
+        render-text   (fn [{:keys [text color location]}]
                         (when (pos? (:colored @brain-state))
                           (set! (.-lineWidth ctx) 4)
                           (let [[x y z] location]
@@ -536,9 +535,8 @@
     (let [labels (when (seq sections)
                    (sort-by (fn [label]
                               (get-in label [:location 2]))
-                            (for [{:keys [region centroid label]} render-graph]
-                              {:label label
-                               :text (:description (sections region))
+                            (for [{:keys [region centroid label]} (filter :region render-graph)]
+                              {:text (:description (sections region))
                                :color (region-color (:index (sections region)))
                                :location (point->screen canvas-resolution rotation label)})))
           render-labels (fn [from to]
@@ -578,7 +576,7 @@
                                                                 :rotation
                                                                 (fn [rotation]
                                                                   (render-brain (.getContext (:canvas @brain-state) "2d") rotation (:render-graph @brain-state))
-                                                                  (+ rotation 0.01))))
+                                                                  (+ rotation (:speed @brain-state)))))
                                                        50)))
   (componentWillUnmount [this]
                         (js/clearInterval (:interval (om/get-state this))))
@@ -608,7 +606,8 @@
                        brain-state)))
             (mo/motion {:defaultStyle {:top     0
                                        :colored 0
-                                       :width   100}
+                                       :width   100
+                                       :speed 0.01}
                         :style        {:colored (mo/spring (if (and (= mode :brain) (not loading))
                                                              1
                                                              0)
@@ -619,9 +618,15 @@
                                        :width   (mo/spring (if (= mode :zoom)
                                                              150
                                                              60)
-                                                           mo/wobbly)}}
+                                                           mo/wobbly)
+                                       :speed (if (#{:brain :white} mode)
+                                                   0.01
+                                                   0)}}
                        (fn [value]
-                         (swap! brain-state assoc :colored (:colored value))
+                         (swap! brain-state
+                                assoc
+                                :colored (:colored value)
+                                :speed (:speed value))
                          (dom/div {:style {:width    (str (:width value) "vmin")
                                            :height   (str (:width value) "vmin")
                                            :position "absolute"
@@ -671,11 +676,12 @@
                         (js/clearInterval (get-in (om/get-state this) [:intervals :address])))
   (render [this] 
           (let [{:keys [:etherean/network-id :user/can-vote-proposal :user/stake] proposals-props :etherean/main-proposals stakes-props :etherean/main-stakes items-props :etherean/main-items brain-props :etherean/main-brain} (om/props this)]
+
             (dom/div {:class "pt-dark" :style {:display "flex" :justify-content "center" :zoom 1.3}}
                      (dom/div { :style {:flex-grow "1" :max-width "600px"}}
                               (bp/tabs {#_#_:initial-selected-tab-index 4
                                         :on-change (fn [index]
-                                                     (om/update-state! this assoc :canvas-mode ([:brain :white :zoom :white :white] index)))} (bp/tab-list (bp/tab "Brain") (bp/tab "Top 10 Items") (bp/tab "Today's Proposed Items") (bp/tab "Voting Stakes") (bp/tab "FAQ"))
+                                                     (om/update-state! this assoc :canvas-mode ([:brain :stopped :zoom :white :white] index)))} (bp/tab-list (bp/tab "Brain") (bp/tab "Top 10 Items") (bp/tab "Today's Proposed Items") (bp/tab "Voting Stakes") (bp/tab "FAQ"))
                                        (bp/tab-panel (dom/div {:style {:position       "absolute"
                                                                        :bottom         0
                                                                        :left           0
@@ -693,7 +699,8 @@
                                                                          
                                                                          (dom/div {:style {:display "flex"
                                                                                            :align-items "center"
-                                                                                           :font-size "1.1rem"}}
+                                                                                           :font-size "1.1rem"
+                                                                                           :margin-bottom "2rem"}}
                                                                                   (dom/div {:style {:margin "0.5em"}}
                                                                                            "EthereanMind requires access to the "
                                                                                            (dom/a {:target "_blank"
@@ -1319,8 +1326,7 @@
 ;; "call to action"
 ;; add indicator for withdrawal date
 ;; add visual indicator for current endorsed items
-;; freeze brain
 ;; "synapse firing" on first page
 ;; clickable brain
-;; sometimes double label appears
+;; audit "automated item voting" logic
 ;; future: let people submit links, make brain items topics
