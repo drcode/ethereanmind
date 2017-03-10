@@ -55,8 +55,8 @@ om.tempid.TempId.cljs$lang$type = true;
 
 om.tempid.TempId.cljs$lang$ctorStr = "om.tempid/TempId";
 
-om.tempid.TempId.cljs$lang$ctorPrWriter = (function (this__34879__auto__,writer__34880__auto__,opt__34881__auto__){
-return cljs.core._write.call(null,writer__34880__auto__,"om.tempid/TempId");
+om.tempid.TempId.cljs$lang$ctorPrWriter = (function (this__32485__auto__,writer__32486__auto__,opt__32487__auto__){
+return cljs.core._write.call(null,writer__32486__auto__,"om.tempid/TempId");
 });
 
 om.tempid.__GT_TempId = (function om$tempid$__GT_TempId(id,__hash){
@@ -64,23 +64,23 @@ return (new om.tempid.TempId(id,__hash));
 });
 
 om.tempid.tempid = (function om$tempid$tempid(var_args){
-var args47816 = [];
-var len__35410__auto___47819 = arguments.length;
-var i__35411__auto___47820 = (0);
+var args56403 = [];
+var len__32954__auto___56406 = arguments.length;
+var i__32955__auto___56407 = (0);
 while(true){
-if((i__35411__auto___47820 < len__35410__auto___47819)){
-args47816.push((arguments[i__35411__auto___47820]));
+if((i__32955__auto___56407 < len__32954__auto___56406)){
+args56403.push((arguments[i__32955__auto___56407]));
 
-var G__47821 = (i__35411__auto___47820 + (1));
-i__35411__auto___47820 = G__47821;
+var G__56408 = (i__32955__auto___56407 + (1));
+i__32955__auto___56407 = G__56408;
 continue;
 } else {
 }
 break;
 }
 
-var G__47818 = args47816.length;
-switch (G__47818) {
+var G__56405 = args56403.length;
+switch (G__56405) {
 case 0:
 return om.tempid.tempid.cljs$core$IFn$_invoke$arity$0();
 
@@ -90,7 +90,7 @@ return om.tempid.tempid.cljs$core$IFn$_invoke$arity$1((arguments[(0)]));
 
 break;
 default:
-throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args47816.length)].join('')));
+throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args56403.length)].join('')));
 
 }
 });
@@ -109,4 +109,4 @@ om.tempid.tempid_QMARK_ = (function om$tempid$tempid_QMARK_(x){
 return (x instanceof om.tempid.TempId);
 });
 
-//# sourceMappingURL=tempid.js.map?rel=1489120067880
+//# sourceMappingURL=tempid.js.map?rel=1489123391150
