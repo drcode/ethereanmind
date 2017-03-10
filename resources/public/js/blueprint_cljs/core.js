@@ -11,53 +11,53 @@ return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMP
 });
 blueprint_cljs.core.declare_factory = (function blueprint_cljs$core$declare_factory(factory){
 return (function() { 
-var G__79723__delegate = function (args){
-var vec__79720 = blueprint_cljs.core.extract_opts.call(null,args);
-var props = cljs.core.nth.call(null,vec__79720,(0),null);
-var children = cljs.core.nth.call(null,vec__79720,(1),null);
+var G__61994__delegate = function (args){
+var vec__61991 = blueprint_cljs.core.extract_opts.call(null,args);
+var props = cljs.core.nth.call(null,vec__61991,(0),null);
+var children = cljs.core.nth.call(null,vec__61991,(1),null);
 return cljs.core.apply.call(null,factory,om_tools.dom.format_opts.call(null,props),children);
 };
-var G__79723 = function (var_args){
+var G__61994 = function (var_args){
 var args = null;
 if (arguments.length > 0) {
-var G__79724__i = 0, G__79724__a = new Array(arguments.length -  0);
-while (G__79724__i < G__79724__a.length) {G__79724__a[G__79724__i] = arguments[G__79724__i + 0]; ++G__79724__i;}
-  args = new cljs.core.IndexedSeq(G__79724__a,0);
+var G__61995__i = 0, G__61995__a = new Array(arguments.length -  0);
+while (G__61995__i < G__61995__a.length) {G__61995__a[G__61995__i] = arguments[G__61995__i + 0]; ++G__61995__i;}
+  args = new cljs.core.IndexedSeq(G__61995__a,0);
 } 
-return G__79723__delegate.call(this,args);};
-G__79723.cljs$lang$maxFixedArity = 0;
-G__79723.cljs$lang$applyTo = (function (arglist__79725){
-var args = cljs.core.seq(arglist__79725);
-return G__79723__delegate(args);
+return G__61994__delegate.call(this,args);};
+G__61994.cljs$lang$maxFixedArity = 0;
+G__61994.cljs$lang$applyTo = (function (arglist__61996){
+var args = cljs.core.seq(arglist__61996);
+return G__61994__delegate(args);
 });
-G__79723.cljs$core$IFn$_invoke$arity$variadic = G__79723__delegate;
-return G__79723;
+G__61994.cljs$core$IFn$_invoke$arity$variadic = G__61994__delegate;
+return G__61994;
 })()
 ;
 });
 blueprint_cljs.core.declare_component = (function blueprint_cljs$core$declare_component(component){
 return (function() { 
-var G__79732__delegate = function (args){
-var vec__79729 = blueprint_cljs.core.extract_opts.call(null,args);
-var props = cljs.core.nth.call(null,vec__79729,(0),null);
-var children = cljs.core.nth.call(null,vec__79729,(1),null);
+var G__62003__delegate = function (args){
+var vec__62000 = blueprint_cljs.core.extract_opts.call(null,args);
+var props = cljs.core.nth.call(null,vec__62000,(0),null);
+var children = cljs.core.nth.call(null,vec__62000,(1),null);
 return cljs.core.apply.call(null,React.createElement,component,om_tools.dom.format_opts.call(null,props),children);
 };
-var G__79732 = function (var_args){
+var G__62003 = function (var_args){
 var args = null;
 if (arguments.length > 0) {
-var G__79733__i = 0, G__79733__a = new Array(arguments.length -  0);
-while (G__79733__i < G__79733__a.length) {G__79733__a[G__79733__i] = arguments[G__79733__i + 0]; ++G__79733__i;}
-  args = new cljs.core.IndexedSeq(G__79733__a,0);
+var G__62004__i = 0, G__62004__a = new Array(arguments.length -  0);
+while (G__62004__i < G__62004__a.length) {G__62004__a[G__62004__i] = arguments[G__62004__i + 0]; ++G__62004__i;}
+  args = new cljs.core.IndexedSeq(G__62004__a,0);
 } 
-return G__79732__delegate.call(this,args);};
-G__79732.cljs$lang$maxFixedArity = 0;
-G__79732.cljs$lang$applyTo = (function (arglist__79734){
-var args = cljs.core.seq(arglist__79734);
-return G__79732__delegate(args);
+return G__62003__delegate.call(this,args);};
+G__62003.cljs$lang$maxFixedArity = 0;
+G__62003.cljs$lang$applyTo = (function (arglist__62005){
+var args = cljs.core.seq(arglist__62005);
+return G__62003__delegate(args);
 });
-G__79732.cljs$core$IFn$_invoke$arity$variadic = G__79732__delegate;
-return G__79732;
+G__62003.cljs$core$IFn$_invoke$arity$variadic = G__62003__delegate;
+return G__62003;
 })()
 ;
 });
@@ -91,25 +91,25 @@ blueprint_cljs.core.tooltip = blueprint_cljs.core.declare_factory.call(null,Blue
 blueprint_cljs.core.progress_bar = blueprint_cljs.core.declare_factory.call(null,Blueprint.ProgressBarFactory);
 blueprint_cljs.core.tree = blueprint_cljs.core.declare_factory.call(null,Blueprint.TreeFactory);
 blueprint_cljs.core.clj__GT_tree_nodes = (function blueprint_cljs$core$clj__GT_tree_nodes(nodes){
-var iter__35244__auto__ = (function blueprint_cljs$core$clj__GT_tree_nodes_$_iter__79739(s__79740){
+var iter__35081__auto__ = (function blueprint_cljs$core$clj__GT_tree_nodes_$_iter__62010(s__62011){
 return (new cljs.core.LazySeq(null,(function (){
-var s__79740__$1 = s__79740;
+var s__62011__$1 = s__62011;
 while(true){
-var temp__6728__auto__ = cljs.core.seq.call(null,s__79740__$1);
+var temp__6728__auto__ = cljs.core.seq.call(null,s__62011__$1);
 if(temp__6728__auto__){
-var s__79740__$2 = temp__6728__auto__;
-if(cljs.core.chunked_seq_QMARK_.call(null,s__79740__$2)){
-var c__35242__auto__ = cljs.core.chunk_first.call(null,s__79740__$2);
-var size__35243__auto__ = cljs.core.count.call(null,c__35242__auto__);
-var b__79742 = cljs.core.chunk_buffer.call(null,size__35243__auto__);
-if((function (){var i__79741 = (0);
+var s__62011__$2 = temp__6728__auto__;
+if(cljs.core.chunked_seq_QMARK_.call(null,s__62011__$2)){
+var c__35079__auto__ = cljs.core.chunk_first.call(null,s__62011__$2);
+var size__35080__auto__ = cljs.core.count.call(null,c__35079__auto__);
+var b__62013 = cljs.core.chunk_buffer.call(null,size__35080__auto__);
+if((function (){var i__62012 = (0);
 while(true){
-if((i__79741 < size__35243__auto__)){
-var node = cljs.core._nth.call(null,c__35242__auto__,i__79741);
-cljs.core.chunk_append.call(null,b__79742,om_tools.dom.format_opts.call(null,cljs.core.update.call(null,node,new cljs.core.Keyword(null,"child-nodes","child-nodes",-776571394),blueprint_cljs$core$clj__GT_tree_nodes)));
+if((i__62012 < size__35080__auto__)){
+var node = cljs.core._nth.call(null,c__35079__auto__,i__62012);
+cljs.core.chunk_append.call(null,b__62013,om_tools.dom.format_opts.call(null,cljs.core.update.call(null,node,new cljs.core.Keyword(null,"child-nodes","child-nodes",-776571394),blueprint_cljs$core$clj__GT_tree_nodes)));
 
-var G__79743 = (i__79741 + (1));
-i__79741 = G__79743;
+var G__62014 = (i__62012 + (1));
+i__62012 = G__62014;
 continue;
 } else {
 return true;
@@ -117,13 +117,13 @@ return true;
 break;
 }
 })()){
-return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__79742),blueprint_cljs$core$clj__GT_tree_nodes_$_iter__79739.call(null,cljs.core.chunk_rest.call(null,s__79740__$2)));
+return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__62013),blueprint_cljs$core$clj__GT_tree_nodes_$_iter__62010.call(null,cljs.core.chunk_rest.call(null,s__62011__$2)));
 } else {
-return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__79742),null);
+return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__62013),null);
 }
 } else {
-var node = cljs.core.first.call(null,s__79740__$2);
-return cljs.core.cons.call(null,om_tools.dom.format_opts.call(null,cljs.core.update.call(null,node,new cljs.core.Keyword(null,"child-nodes","child-nodes",-776571394),blueprint_cljs$core$clj__GT_tree_nodes)),blueprint_cljs$core$clj__GT_tree_nodes_$_iter__79739.call(null,cljs.core.rest.call(null,s__79740__$2)));
+var node = cljs.core.first.call(null,s__62011__$2);
+return cljs.core.cons.call(null,om_tools.dom.format_opts.call(null,cljs.core.update.call(null,node,new cljs.core.Keyword(null,"child-nodes","child-nodes",-776571394),blueprint_cljs$core$clj__GT_tree_nodes)),blueprint_cljs$core$clj__GT_tree_nodes_$_iter__62010.call(null,cljs.core.rest.call(null,s__62011__$2)));
 }
 } else {
 return null;
@@ -132,13 +132,13 @@ break;
 }
 }),null,null));
 });
-return iter__35244__auto__.call(null,nodes);
+return iter__35081__auto__.call(null,nodes);
 });
 blueprint_cljs.core.toaster = (function blueprint_cljs$core$toaster(){
 return Blueprint.Toaster.create();
 });
-var i_79744 = Blueprint.Intent;
-blueprint_cljs.core.intents = new cljs.core.PersistentArrayMap(null, 4, [new cljs.core.Keyword(null,"primary","primary",817773892),i_79744.PRIMARY,new cljs.core.Keyword(null,"success","success",1890645906),i_79744.SUCCESS,new cljs.core.Keyword(null,"warning","warning",-1685650671),i_79744.WARNING,new cljs.core.Keyword(null,"danger","danger",-624338030),i_79744.DANGER], null);
+var i_62015 = Blueprint.Intent;
+blueprint_cljs.core.intents = new cljs.core.PersistentArrayMap(null, 4, [new cljs.core.Keyword(null,"primary","primary",817773892),i_62015.PRIMARY,new cljs.core.Keyword(null,"success","success",1890645906),i_62015.SUCCESS,new cljs.core.Keyword(null,"warning","warning",-1685650671),i_62015.WARNING,new cljs.core.Keyword(null,"danger","danger",-624338030),i_62015.DANGER], null);
 blueprint_cljs.core.context_menu = Blueprint.ContextMenu;
 
-//# sourceMappingURL=core.js.map?rel=1488154329714
+//# sourceMappingURL=core.js.map?rel=1489120090392

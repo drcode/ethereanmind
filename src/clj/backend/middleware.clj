@@ -1,12 +1,12 @@
 (ns backend.middleware
   (:require [ring.util.response :refer :all]
             [cognitect.transit :as transit]
-            [om.next.server :as om])
+            #_[om.next.server :as om])
   (:import [java.io ByteArrayOutputStream ByteArrayInputStream]))
 
 
 (defn- write [x t opts]
-  (let [baos (ByteArrayOutputStream.)
+  #_(let [baos (ByteArrayOutputStream.)
         w    (om/writer baos opts)
         _    (transit/write w x)
         ret  (.toString baos)]
@@ -19,7 +19,7 @@
       [(not (empty? mtch)) (keyword (second mtch))])))
 
 (defn- read-transit [request {:keys [opts]}]
-  (let [[res t] (transit-request? request)]
+  #_(let [[res t] (transit-request? request)]
     (if res
       (if-let [body (:body request)]
         (let [rdr (om/reader body opts)]
