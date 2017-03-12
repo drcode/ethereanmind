@@ -44,7 +44,9 @@
      :source-paths ["src/cljs"]
      :compiler {:output-to "resources/public/js/main.js"
                 :output-dir "resources/public/js"
+                :source-map "resources/public/js/main.js.map"
                 :optimizations :advanced
+                :externs ["blueprintjs-externs.js" "web3-externs.js"]
                 :pretty-print false}}]}
 
   )

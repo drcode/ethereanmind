@@ -1,4 +1,4 @@
-// Compiled by ClojureScript 1.9.229 {}
+// Compiled by ClojureScript 1.9.229 {:static-fns true, :optimize-constants true}
 goog.provide('om.transit');
 goog.require('cljs.core');
 goog.require('cognitect.transit');
@@ -37,8 +37,8 @@ om.transit.TempIdHandler.cljs$lang$type = true;
 
 om.transit.TempIdHandler.cljs$lang$ctorStr = "om.transit/TempIdHandler";
 
-om.transit.TempIdHandler.cljs$lang$ctorPrWriter = (function (this__32485__auto__,writer__32486__auto__,opt__32487__auto__){
-return cljs.core._write.call(null,writer__32486__auto__,"om.transit/TempIdHandler");
+om.transit.TempIdHandler.cljs$lang$ctorPrWriter = (function (this__7023__auto__,writer__7024__auto__,opt__7025__auto__){
+return cljs.core._write(writer__7024__auto__,"om.transit/TempIdHandler");
 });
 
 om.transit.__GT_TempIdHandler = (function om$transit$__GT_TempIdHandler(){
@@ -46,23 +46,23 @@ return (new om.transit.TempIdHandler());
 });
 
 om.transit.writer = (function om$transit$writer(var_args){
-var args56412 = [];
-var len__32954__auto___56415 = arguments.length;
-var i__32955__auto___56416 = (0);
+var args24123 = [];
+var len__7492__auto___24126 = arguments.length;
+var i__7493__auto___24127 = (0);
 while(true){
-if((i__32955__auto___56416 < len__32954__auto___56415)){
-args56412.push((arguments[i__32955__auto___56416]));
+if((i__7493__auto___24127 < len__7492__auto___24126)){
+args24123.push((arguments[i__7493__auto___24127]));
 
-var G__56417 = (i__32955__auto___56416 + (1));
-i__32955__auto___56416 = G__56417;
+var G__24128 = (i__7493__auto___24127 + (1));
+i__7493__auto___24127 = G__24128;
 continue;
 } else {
 }
 break;
 }
 
-var G__56414 = args56412.length;
-switch (G__56414) {
+var G__24125 = args24123.length;
+switch (G__24125) {
 case 0:
 return om.transit.writer.cljs$core$IFn$_invoke$arity$0();
 
@@ -72,39 +72,39 @@ return om.transit.writer.cljs$core$IFn$_invoke$arity$1((arguments[(0)]));
 
 break;
 default:
-throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args56412.length)].join('')));
+throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args24123.length)].join('')));
 
 }
 });
 
 om.transit.writer.cljs$core$IFn$_invoke$arity$0 = (function (){
-return om.transit.writer.call(null,cljs.core.PersistentArrayMap.EMPTY);
+return om.transit.writer.cljs$core$IFn$_invoke$arity$1(cljs.core.PersistentArrayMap.EMPTY);
 });
 
 om.transit.writer.cljs$core$IFn$_invoke$arity$1 = (function (opts){
-return cognitect.transit.writer.call(null,new cljs.core.Keyword(null,"json","json",1279968570),cljs.core.assoc_in.call(null,opts,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"handlers","handlers",79528781),om.tempid.TempId], null),(new om.transit.TempIdHandler())));
+return cognitect.transit.writer.cljs$core$IFn$_invoke$arity$2(cljs.core.cst$kw$json,cljs.core.assoc_in(opts,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [cljs.core.cst$kw$handlers,om.tempid.TempId], null),(new om.transit.TempIdHandler())));
 });
 
 om.transit.writer.cljs$lang$maxFixedArity = 1;
 
 om.transit.reader = (function om$transit$reader(var_args){
-var args56419 = [];
-var len__32954__auto___56422 = arguments.length;
-var i__32955__auto___56423 = (0);
+var args24130 = [];
+var len__7492__auto___24133 = arguments.length;
+var i__7493__auto___24134 = (0);
 while(true){
-if((i__32955__auto___56423 < len__32954__auto___56422)){
-args56419.push((arguments[i__32955__auto___56423]));
+if((i__7493__auto___24134 < len__7492__auto___24133)){
+args24130.push((arguments[i__7493__auto___24134]));
 
-var G__56424 = (i__32955__auto___56423 + (1));
-i__32955__auto___56423 = G__56424;
+var G__24135 = (i__7493__auto___24134 + (1));
+i__7493__auto___24134 = G__24135;
 continue;
 } else {
 }
 break;
 }
 
-var G__56421 = args56419.length;
-switch (G__56421) {
+var G__24132 = args24130.length;
+switch (G__24132) {
 case 0:
 return om.transit.reader.cljs$core$IFn$_invoke$arity$0();
 
@@ -114,22 +114,20 @@ return om.transit.reader.cljs$core$IFn$_invoke$arity$1((arguments[(0)]));
 
 break;
 default:
-throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args56419.length)].join('')));
+throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args24130.length)].join('')));
 
 }
 });
 
 om.transit.reader.cljs$core$IFn$_invoke$arity$0 = (function (){
-return om.transit.reader.call(null,cljs.core.PersistentArrayMap.EMPTY);
+return om.transit.reader.cljs$core$IFn$_invoke$arity$1(cljs.core.PersistentArrayMap.EMPTY);
 });
 
 om.transit.reader.cljs$core$IFn$_invoke$arity$1 = (function (opts){
-return cognitect.transit.reader.call(null,new cljs.core.Keyword(null,"json","json",1279968570),cljs.core.assoc_in.call(null,opts,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"handlers","handlers",79528781),"om/id"], null),(function (id){
-return om.tempid.tempid.call(null,id);
+return cognitect.transit.reader.cljs$core$IFn$_invoke$arity$2(cljs.core.cst$kw$json,cljs.core.assoc_in(opts,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [cljs.core.cst$kw$handlers,"om/id"], null),(function (id){
+return om.tempid.tempid.cljs$core$IFn$_invoke$arity$1(id);
 })));
 });
 
 om.transit.reader.cljs$lang$maxFixedArity = 1;
 
-
-//# sourceMappingURL=transit.js.map?rel=1489123391188
