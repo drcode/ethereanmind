@@ -39,8 +39,6 @@
                         :etherean/user  {}
                         :item/by-id     []})))
 
-(declare reconciler)
-
 (defn css-percent [part whole]
   (str (/ (* part 100) whole) "%"))
 

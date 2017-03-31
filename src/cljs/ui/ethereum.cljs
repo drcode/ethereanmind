@@ -1,5 +1,6 @@
 (ns ui.ethereum
   (:require-macros [shared.debug :refer [mdbg mdbg-sample]]
+                   [ui.ethereum :refer [with-contract]]
                    [cljs.core.async.macros :refer [go]])
   (:require [om.next :as om :refer-macros [defui]]
             [om-tools.dom :as dom]
@@ -32,7 +33,7 @@
                      "Moon"])
 
 (def offline false)
-j
+
 (defonce loaded
   (let [c (as/chan)]
     (js/window.addEventListener "load"
@@ -289,14 +290,15 @@ j
                     (<! (get-proposal-description (int (aget proposal 3)) proposal-index)))))}))
 
 (defmethod read-server :etherean/items [env dispatch-key params]
-  {:value (if offline
-            (ex-info "not implemented" {})
-            (go (let [{:keys [parser query]} env
-                      items                  (atom [])]
-                  (doseq [item-index (range max-items)]
-                    (let [item (<! (chan-call (etherean) :items item-index))]
-                      (swap! items assoc item-index (<! (parser (assoc env :item item :item-id item-index) query)))))
-                  @items)))})
+  {:value (with-contract [etherean (etherean)]
+            (if offline
+              (ex-info "not implemented" {})
+              (go (let [{:keys [parser query]} env
+                        items                  (atom [])]
+                    (doseq [item-index (range max-items)]
+                      (let [item (<! (etherean/items item-index))]
+                        (swap! items assoc item-index (<! (parser (assoc env :item item :item-id item-index) query)))))
+                    @items))))})
 
 (defmethod read-server :etherean/main-stakes [& args]
   (apply recursive-channel-read args))
