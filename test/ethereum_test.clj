@@ -3,7 +3,7 @@
             [ui.ethereum :as et]))
 
 (deftest replace-test []
-  #_(is (= (et/replace-contract-references '(do (foo)
+  (is (= (et/replace-contract-references '(do (foo)
                                               (bar/baz 23))
                                          'bar)
          '(do (foo)
